@@ -27,7 +27,7 @@ func (h *PipeHandler) Handle(ctx context.Context, r slog.Record) error {
 
 	var buf bytes.Buffer
 
-	fmt.Fprintf(&buf, "time=%s level=%s server=1",
+	fmt.Fprintf(&buf, "time=%s level=%s server=2",
 		r.Time.Format(time.RFC3339),
 		r.Level.String())
 

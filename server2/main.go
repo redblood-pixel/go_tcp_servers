@@ -101,7 +101,6 @@ func main() {
 			}
 			conn.SetDeadline(time.Now().Add(10 * time.Minute))
 			go serve(conn)
-			logger.Info("start serving")
 		}
 	}()
 	<-quitChan
@@ -113,9 +112,18 @@ func main() {
 // serve entry, check simple or long option
 func serve(conn net.Conn) {
 	cnt.Increase()
+	logger.Info(
+		"Start serving",
+		slog.Int("conn", cnt.GetCnt()),
+	)
 	sendMessage(conn, "choose option: (1 - simple, 2 - long)")
 	buf1 := make([]byte, 2)
 	if n, err := conn.Read(buf1); err != nil || n == 0 {
+		logger.Error(
+			"error while reading",
+			slog.String("err", err.Error()),
+			slog.Int("conn", cnt.GetCnt()),
+		)
 		return
 	}
 
@@ -133,7 +141,10 @@ func serve(conn net.Conn) {
 	} else {
 		sendMessage(conn, "Not valid option")
 	}
-	logger.Info("Stop serving")
+	logger.Info(
+		"Stop serving",
+		slog.Int("conn", cnt.GetCnt()),
+	)
 }
 
 func serveSimple(conn net.Conn, parameter string) {
