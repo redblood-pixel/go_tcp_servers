@@ -12,6 +12,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/fatih/color"
 	"golang.org/x/sync/semaphore"
 )
 
@@ -71,7 +72,7 @@ func main() {
 			}
 		}
 	}(ch)
-	currentColor = colors["white"]
+	currentColor = color.New(color.FgWhite)
 	logger = slog.New(NewColorHandler(os.Stdout, ch))
 
 	l, err := net.Listen("tcp", ":5001")
@@ -100,7 +101,9 @@ func main() {
 				conn, err := l.Accept()
 				if err != nil {
 					logger.Error("error while accepting", slog.String("err", err.Error()))
-					conn.Close()
+					if conn != nil {
+						conn.Close()
+					}
 					continue
 				}
 				conn.SetDeadline(time.Now().Add(10 * time.Minute))
@@ -122,7 +125,7 @@ func serve(conn net.Conn) {
 	input := make([]byte, 128)
 
 	n, err := conn.Read(input)
-	if err != nil || n == 0 {
+	if err != nil {
 		logger.Error(
 			"error while reading from conn",
 			slog.String("err", err.Error()),

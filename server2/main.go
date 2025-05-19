@@ -54,13 +54,13 @@ func main() {
 	sem := semaphore.NewWeighted(maxConnnections)
 
 	pipe, err := os.OpenFile("/tmp/log_pipe", os.O_RDWR, os.ModeNamedPipe)
+	logger = slog.New(NewPipeHandler(os.Stdout, ch))
 	if err != nil {
 		logger.Error("os.OpenFile failed", "err", err)
 		return
 	}
 	defer pipe.Close()
 
-	logger = slog.New(NewPipeHandler(os.Stdout, ch))
 	go func(ch chan string) {
 		for {
 			select {

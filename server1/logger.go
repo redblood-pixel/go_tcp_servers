@@ -46,7 +46,11 @@ func (h *ColorHandler) Handle(ctx context.Context, r slog.Record) error {
 		r.Level.String())
 
 	// Основное сообщение с цветом
-	fmt.Fprintf(&buf, " msg=%s", currentColor.Sprint(r.Message))
+	colorFunc := color.New(color.FgWhite).Sprint
+	if currentColor != nil {
+		colorFunc = currentColor.Sprint
+	}
+	fmt.Fprintf(&buf, " msg=%s", colorFunc(r.Message))
 
 	// Добавляем все атрибуты
 	r.Attrs(func(attr slog.Attr) bool {
