@@ -15,7 +15,7 @@ sudo cp server2 /usr/local/bin/server2
 cd ../log_server
 go mod download
 go build -o log_server .
-sudo cp log_server /usr/loca/bin/log_server
+sudo cp log_server /usr/local/bin/log_server
 
 cd ..
 sudo cp server1.service /etc/systemd/system/server1.service
