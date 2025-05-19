@@ -160,7 +160,8 @@ func serveLong(conn net.Conn, parameter string) {
 			sendMessage(conn, fmt.Sprintf("error occured while getting info - %s", err.Error()))
 			break
 		}
-		if availableMemory != currentAvailableMemory || freeMemoryPercent != currentFreeMemoryPercent {
+		if (parameter == availableMemoryParameter && availableMemory != currentAvailableMemory) ||
+			(parameter == freeMemoryPercentParameter && freeMemoryPercent != currentFreeMemoryPercent) {
 			currentAvailableMemory = availableMemory
 			currentFreeMemoryPercent = freeMemoryPercent
 			err := sendMessage(conn, getInfo(parameter, availableMemory, freeMemoryPercent))

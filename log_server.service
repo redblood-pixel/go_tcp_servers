@@ -1,0 +1,12 @@
+[Unit]
+Description=log server
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+ExecStart=/usr/local/bin/log_server
+
+[Install]
+WantedBy=multi-user.target
