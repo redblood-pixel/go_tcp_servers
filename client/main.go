@@ -140,21 +140,8 @@ func secondServer(conn net.Conn) {
 	}
 
 	buf = make([]byte, 1024)
-	ch := make(chan struct{}, 1)
 
-	if paramType == "2" {
-		// Для типа 2 ждем ввод (но теперь через переменную окружения)
-		// Можно добавить таймаут или другую логику
-		<-ch
-	}
-
-loop:
 	for {
-		select {
-		case <-ch:
-			break loop
-		default:
-		}
 		n, err := conn.Read(buf)
 		if err != nil {
 			if err == io.EOF {
